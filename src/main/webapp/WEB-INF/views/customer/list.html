@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Language: <a href="?lang=en">English</a> | <a href="?lang=vie">Vietnamese</a>
+<h1 th:text="#{list.heading}"></h1>
+<a href="/create-customer" th:text="#{list.create}"></a>
+<form>
+    <span th:text="#{list.search}"></span>
+    <input name="s" type="text"/>
+    <input type="submit" th:value="#{list.searchBtn}"/>
+</form><br/>
+<table border="1">
+    <tr>
+        <th th:text="#{list.firstName}"></th>
+        <th th:text="#{list.lastName}"></th>
+        <th th:text="#{list.province}"></th>
+        <th th:text="#{list.edit}"></th>
+        <th th:text="#{list.delete}"></th>
+    </tr>
+    <th:block th:each="customer : ${customers}">
+        <tr>
+            <td th:text="${customer.firstName}"></td>
+            <td th:text="${customer.lastName}"></td>
+            <td th:text="${customer.province.name}"></td>
+            <td><a th:href="@{/edit-customer/__${customer.id}__ }" th:text="#{list.edit}"></a></td>
+            <td><a th:href="@{/delete-customer/__${customer.id}__ }" th:text="#{list.delete}"></a></td>
+        </tr>
+    </th:block>
+    <div>
+        <a th:href="@{'/customers'(page=${customers.number - 1})}" th:if="${customers.hasPrevious()}" th:text="#{list.previous}"></a>
+        <span th:text="${customers.number + 1}"></span>/<span th:text="${customers.totalPages}"></span>
+        <a th:href="@{'/customers'(page=${customers.number + 1})}" th:if="${customers.hasNext()}" th:text="#{list.next}"></a>
+    </div>
+</table>
+</body>
+</html>
